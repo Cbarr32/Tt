@@ -1,0 +1,22 @@
+{
+  "name": "Tt - Message Repository",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "forwardPorts": [8080],
+  "postCreateCommand": "echo 'Codespace ready! You can now develop from your phone.'",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "yzhang.markdown-all-in-one",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "editor.fontSize": 14,
+        "editor.wordWrap": "on",
+        "editor.minimap.enabled": false,
+        "files.autoSave": "afterDelay",
+        "files.autoSaveDelay": 1000,
+        "workbench.colorTheme": "Default Dark+"
+      }
+    }
+  }
+}

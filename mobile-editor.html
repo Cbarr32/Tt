@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Mobile Editor - Tt Repository</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 15px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+            color: #667eea;
+        }
+        
+        .header p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h2 {
+            margin: 0 0 15px 0;
+            font-size: 1.2em;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .emoji {
+            font-size: 1.3em;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 5px;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .button:active {
+            transform: scale(0.95);
+        }
+        
+        .button-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .button-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .quick-links {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            transition: background 0.3s;
+        }
+        
+        .quick-link:active {
+            background: #e9ecef;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        
+        .preview {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 30px;
+            }
+            
+            .quick-links {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 Mobile Repository Editor</h1>
+            <p>Quick access to edit and manage your repository from your phone</p>
+        </div>
+        
+        <div class="card">
+            <h2><span class="emoji">✏️</span> Quick Edit</h2>
+            <textarea id="editor" placeholder="Type or paste your message here...">Ya wal lmd</textarea>
+            <div style="margin-top: 15px;">
+                <button class="button" onclick="copyText()">📋 Copy Text</button>
+                <button class="button button-success" onclick="saveLocal()">💾 Save Local</button>
+            </div>
+            <div id="preview" class="preview" style="display: none;"></div>
+        </div>
+        
+        <div class="card">
+            <h2><span class="emoji">🔗</span> Quick Links</h2>
+            <div class="quick-links">
+                <a href="https://github.com/Cbarr32/Tt" class="quick-link">
+                    <span class="emoji">🏠</span>
+                    <div>
+                        <strong>Repository Home</strong><br>
+                        <small>View on GitHub</small>
+                    </div>
+                </a>
+                
+                <a href="https://github.dev/Cbarr32/Tt" class="quick-link">
+                    <span class="emoji">💻</span>
+                    <div>
+                        <strong>GitHub.dev Editor</strong><br>
+                        <small>Full VSCode in browser</small>
+                    </div>
+                </a>
+                
+                <a href="https://github.com/Cbarr32/Tt/edit/Master/README.md" class="quick-link">
+                    <span class="emoji">📝</span>
+                    <div>
+                        <strong>Edit README.md</strong><br>
+                        <small>Quick edit on GitHub</small>
+                    </div>
+                </a>
+                
+                <a href="https://github.com/Cbarr32/Tt/edit/Master/MESSAGE_FOR_WIFE.md" class="quick-link">
+                    <span class="emoji">💌</span>
+                    <div>
+                        <strong>Edit Message</strong><br>
+                        <small>Update personal message</small>
+                    </div>
+                </a>
+                
+                <a href="message.html" class="quick-link">
+                    <span class="emoji">🎨</span>
+                    <div>
+                        <strong>View Styled Message</strong><br>
+                        <small>See formatted version</small>
+                    </div>
+                </a>
+                
+                <a href="MOBILE_DEV_GUIDE.md" class="quick-link">
+                    <span class="emoji">📱</span>
+                    <div>
+                        <strong>Mobile Dev Guide</strong><br>
+                        <small>Full instructions</small>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="instructions">
+                <strong>💡 Tip:</strong> Bookmark this page on your phone's home screen for instant access! On iOS: Share → Add to Home Screen. On Android: Menu → Add to Home screen.
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2><span class="emoji">🚀</span> GitHub Actions</h2>
+            <p style="margin-bottom: 15px;">Direct links to edit repository files:</p>
+            <a href="https://github.com/Cbarr32/Tt" class="button" style="width: calc(100% - 10px);">
+                Open GitHub Mobile App
+            </a>
+            <p style="margin-top: 15px; font-size: 0.9em; color: #666;">
+                Or use the GitHub mobile app for the best editing experience on your phone.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        async function copyText() {
+            const editor = document.getElementById('editor');
+            const text = editor.value;
+            
+            // Try modern Clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    alert('✅ Text copied to clipboard!');
+                    return;
+                } catch (err) {
+                    console.warn('Clipboard API failed, falling back to execCommand', err);
+                }
+            }
+            
+            // Fallback to deprecated method for older browsers
+            try {
+                editor.select();
+                editor.setSelectionRange(0, 99999); // For mobile devices
+                document.execCommand('copy');
+                alert('✅ Text copied to clipboard!');
+            } catch (err) {
+                alert('❌ Failed to copy. Please select and copy manually.');
+            }
+        }
+        
+        function saveLocal() {
+            const text = document.getElementById('editor').value;
+            localStorage.setItem('tt_message', text);
+            alert('✅ Saved locally! Your text is stored in this browser.');
+        }
+        
+        // Load from local storage on page load
+        window.onload = function() {
+            const saved = localStorage.getItem('tt_message');
+            if (saved) {
+                document.getElementById('editor').value = saved;
+            }
+        };
+        
+        // Auto-save as user types
+        let saveTimeout;
+        document.getElementById('editor').addEventListener('input', function() {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                localStorage.setItem('tt_message_autosave', this.value);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
