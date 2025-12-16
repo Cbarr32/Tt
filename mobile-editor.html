@@ -253,12 +253,25 @@
     </div>
     
     <script>
-        function copyText() {
+        async function copyText() {
             const editor = document.getElementById('editor');
-            editor.select();
-            editor.setSelectionRange(0, 99999); // For mobile devices
+            const text = editor.value;
             
+            // Try modern Clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                    alert('✅ Text copied to clipboard!');
+                    return;
+                } catch (err) {
+                    console.warn('Clipboard API failed, falling back to execCommand', err);
+                }
+            }
+            
+            // Fallback to deprecated method for older browsers
             try {
+                editor.select();
+                editor.setSelectionRange(0, 99999); // For mobile devices
                 document.execCommand('copy');
                 alert('✅ Text copied to clipboard!');
             } catch (err) {
